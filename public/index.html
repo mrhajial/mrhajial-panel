@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MR HAJI AL PANEL</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .toggle-form {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .toggle-form a {
+      color: #667eea;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .toggle-form a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .alert {
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .dashboard {
+      text-align: center;
+    }
+
+    .dashboard h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .user-info {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .logout-btn {
+      background: #dc3545;
+    }
+
+    .logout-btn:hover {
+      box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- LOGIN FORM -->
+  <div id="login-form">
+    <h1>🔐 MR HAJI AL PANEL</h1>
+    <div id="login-alert"></div>
+    
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Masukkan username">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Masukkan password">
+    </div>
+
+    <button onclick="login()">Login</button>
+
+    <div class="toggle-form">
+      Belum punya akun? <a onclick="toggleForm()">Daftar sekarang</a>
+    </div>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div id="register-form" class="hidden">
+    <h1>📝 Daftar Akun</h1>
+    <div id="register-alert"></div>
+    
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="reg-username" placeholder="Buat username">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="reg-password" placeholder="Buat password (min 6 karakter)">
+    </div>
+
+    <button onclick="register()">Daftar</button>
+
+    <div class="toggle-form">
+      Sudah punya akun? <a onclick="toggleForm()">Login sekarang</a>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+    <div class="dashboard">
+      <h1>🚀 Dashboard</h1>
+      <div id="user-info" class="user-info"></div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fungsi Toggle Form
+  function toggleForm() {
+    document.getElementById('login-form').classList.toggle('hidden');
+    document.getElementById('register-form').classList.toggle('hidden');
+    clearAlerts();
+  }
+
+  // Fungsi Bersihkan Alert
+  function clearAlerts() {
+    document.getElementById('login-alert').innerHTML = '';
+    document.getElementById('register-alert').innerHTML = '';
+  }
+
+  // Fungsi Tampilkan Alert
+  function showAlert(elementId, message, type) {
+    const alertDiv = document.getElementById(elementId);
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.textContent = message;
+  }
+
+  // REGISTER
+  async function register() {
+    const username = document.getElementById('reg-username').value.trim();
+    const password = document.getElementById('reg-password').value;
+
+    if (!username || !password) {
+      showAlert('register-alert', '❌ Username dan password harus diisi', 'error');
+      return;
+    }
+
+    if (password.length < 6) {
+      showAlert('register-alert', '❌ Password minimal 6 karakter', 'error');
+      return;
+    }
+
+    try {
+      const res = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        showAlert('register-alert', data.message, 'success');
+        setTimeout(() => toggleForm(), 1500);
+      } else {
+        showAlert('register-alert', data.error, 'error');
+      }
+    } catch (error) {
+      showAlert('register-alert', '❌ Terjadi kesalahan: ' + error.message, 'error');
+    }
+  }
+
+  // LOGIN
+  async function login() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!username || !password) {
+      showAlert('login-alert', '❌ Username dan password harus diisi', 'error');
+      return;
+    }
+
+    try {
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        showDashboard();
+      } else {
+        showAlert('login-alert', data.error, 'error');
+      }
+    } catch (error) {
+      showAlert('login-alert', '❌ Terjadi kesalahan: ' + error.message, 'error');
+    }
+  }
+
+  // Tampilkan Dashboard
+  function showDashboard() {
+    const username = localStorage.getItem('username');
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('user-info').innerHTML = `
+      <h3>Selamat datang, <strong>${username}</strong>! 👋</h3>
+      <p>Token disimpan di localStorage</p>
+    `;
+  }
+
+  // LOGOUT
+  function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    clearAlerts();
+  }
+
+  // Cek apakah sudah login saat halaman dimuat
+  window.addEventListener('load', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      showDashboard();
+    }
+  });
+</script>
+
+</body>
+</html>

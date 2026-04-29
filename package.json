@@ -1,0 +1,23 @@
+{
+  "name": "mrhajial-panel",
+  "version": "1.0.0",
+  "description": "MR HAJI AL Panel - Dashboard dengan Authentication",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["panel", "dashboard", "authentication"],
+  "author": "MR HAJI AL",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
